@@ -1,40 +1,42 @@
 # IMPORTS
 from tkinter import *
 import random
-#............
+# CREATE WINDOW
 root = Tk() 
-canvas = Canvas(root, width=1200, height=700 ,bg="black")
-#CONSTANTS
-# playerImage=PhotoImage(file="/home/it-admin/Desktop/VC1-GAME")
-# myPlayer=canvas.create_image(100,100,image=playerImage)
-rectangle=canvas.create_rectangle(0,700,100,680,fill="blue")
+# INITIALIZE CANVAS ELEMENTS
+canvas = Canvas(root,width=1200,height=700)
+bg=PhotoImage(file="imge/background4.gif")
+canvas.create_image( 0, 0, image = bg,anchor = "nw") 
+canvas.pack(expand=True, fill='both')
+# DEFINE VARIABLES
+playerImage = PhotoImage(file="imge/player1.gif")
+playerId = canvas.create_image(600, 650, image = playerImage)
 colors = ["red", "orange", "yellow", "green", "purple", "brown", "blue", "indigo", "violet"]
 color=random.choice(colors)
-enemy=canvas.create_rectangle(50,50,100,100,fill=color)
-#VARIBLAES
-
-# ACTION PLAYER
+ennemy=[]
+ennemyImage=PhotoImage(file="imge/ennemy2.gif")
+#POSITION  ENEMY LEVEL1
+margian=50
+for index in range (1,11):
+    X=50
+    Y=50
+    size=50
+    ennemyId=canvas.create_image(index*(X+size),Y,image=ennemyImage)
+# DEFINE FUNCTIONS
+    # ACTION PLAYER
 def moveRight(event):
-    x1,y1,x2,y2=canvas.coords(rectangle)
-    if x2<=1100 and y2<=1100:
-        canvas.move(rectangle,100,0)
-        canvas.after(0,lambda :moveRight())
+    if canvas.coords(playerId)[0]<=1160:
+        canvas.move(playerId,20,0)
+    # screen_heigt = canvas.winfo_height()
 def moveLeft(event):
-    x1,y1,x2,y2=canvas.coords(rectangle)
-    if x1>0 and y1>0:
-        canvas.move(rectangle,-100,0)
-        canvas.after(0,lambda :moveLeft())
-# ENEMY
-def create_enemy():
-    canvas.move(enemy,2,0)
-    canvas.after(20,lambda:create_enemy())
-# pack means "draw what i put inside"
-canvas.pack(expand=True, fill='both')
-#MOVE 
+    if canvas.coords(playerId)[0]>20:
+        canvas.move(playerId,-20,0)
+    # ENEMY
+
+# BIND KEYS
 root.bind("<Left>", moveLeft)
 root.bind("<Right>", moveRight)
-# # moveball()
-create_enemy()
-create_enemy()
-#Display all
+
+#CALL FUNCTION
+
 root.mainloop()
