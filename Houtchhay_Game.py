@@ -35,6 +35,18 @@ def moveLeft(event):
     # ACTION ENEMY
 imageLaser1=PhotoImage(file="imge/redLaser.gif")
 imageLaser2=PhotoImage(file="imge/redLaser.gif")
+def lasershooting():
+    global firstLaser,secondLaser
+    canvas.move(firstLaser,0,-20)
+    canvas.move(secondLaser,0,-20)
+    dy1=canvas.coords(firstLaser)[1]
+    dy2=canvas.coords(secondLaser)[1]
+    if dy1>0 and dy2>0:
+        canvas.after(10,lambda:lasershooting())
+    else:    
+        canvas.delete(firstLaser)
+        canvas.delete(secondLaser)
+        laserPlayer()
 def laserPlayer():
     global firstLaser,secondLaser
     x=canvas.coords(playerId)[0]
@@ -42,14 +54,6 @@ def laserPlayer():
     firstLaser=canvas.create_image(x-20,y-20,image=imageLaser1)
     secondLaser=canvas.create_image(x+20,y-20,image=imageLaser2)
     lasershooting()
-def lasershooting():
-    global firstLaser,secondLaser
-    y=canvas.coords(laserPlayer)[1]
-    canvas.move(firstLaser,0,-20)
-    canvas.move(secondLaser,0,-20)
-    canvas.after(10,lambda:lasershooting())
-    if y==0:
-        laserPlayer()
 # BIND KEYS
 root.bind("<Left>", moveLeft)
 root.bind("<Right>", moveRight)
