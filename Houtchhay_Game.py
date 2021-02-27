@@ -44,10 +44,12 @@ def laserPlayer():
     lasershooting()
 def lasershooting():
     global firstLaser,secondLaser
-    y=canvas.coords(lasershooting)[1]
+    y=canvas.coords(laserPlayer)[1]
     canvas.move(firstLaser,0,-20)
     canvas.move(secondLaser,0,-20)
     canvas.after(10,lambda:lasershooting())
+    if y==0:
+        laserPlayer()
 # BIND KEYS
 root.bind("<Left>", moveLeft)
 root.bind("<Right>", moveRight)
