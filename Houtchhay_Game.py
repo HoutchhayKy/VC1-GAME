@@ -41,15 +41,17 @@ def laserPlayer():
     y=canvas.coords(playerId)[1]
     firstLaser=canvas.create_image(x-20,y-20,image=imageLaser1)
     secondLaser=canvas.create_image(x+20,y-20,image=imageLaser2)
+    lasershooting()
 def lasershooting():
     global firstLaser,secondLaser
-    canvas.move(firstLaser,0,200)
+    y=canvas.coords(playerId)[1]
+    canvas.move(firstLaser,0,-20)
+    canvas.move(secondLaser,0,-20)
     canvas.after(10,lambda:lasershooting())
-    laserPlayer()
 # BIND KEYS
 root.bind("<Left>", moveLeft)
 root.bind("<Right>", moveRight)
 #CALL FUNCTION
-lasershooting()
+laserPlayer()
 
 root.mainloop()
