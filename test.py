@@ -34,20 +34,12 @@ ennemies=[[ennemy0,10,0],[ennemy1,10,0], [ennemy2,10,0], [ennemy3,10,0], [ennemy
 
 #POSITION  ENEMY LEVEL1
 def ennemyposition():
-    global ennemies,ennemy
-    ennemiesToDelete = []
+    global ennemies
     for index in range (len(ennemies)):
-        ennemy = ennemies[index][0]
         position=canvas.coords(ennemies[index][0])
-        if impactBulletEnnemy():
-            canvas.delete(ennemy)
-            ennemiesToDelete.append(index)
-        else: 
-            if position[0]<40 or position[0]>1160:
-                ennemies[index][1]=-ennemies[index][1]
-            canvas.move(ennemies[index][0],ennemies[index][1],ennemies[index][2])
-    for index in sorted(ennemiesToDelete, reverse=True):
-        ennemies.pop(index)
+        if position[0]<40 or position[0]>1160:
+            ennemies[index][1]=-ennemies[index][1]
+        canvas.move(ennemies[index][0],ennemies[index][1],ennemies[index][2])
     canvas.after(90,ennemyposition())
 # ACTION PLAYER
 def moveRight(event):
@@ -64,11 +56,7 @@ def lasershooting():
     canvas.move(secondLaser,0,-20)
     dyLaser1=canvas.coords(firstLaser)[1]
     dyLaser2=canvas.coords(secondLaser)[1]
-    impact = False
-    for index in range(len(ennemies)):
-        if impactBulletEnnemy():
-            impact = True
-    if dyLaser1>0 and dyLaser2>0 and impact==False:
+    if dyLaser1>0 and dyLaser2>0:
         canvas.after(5,lambda:lasershooting())
     else:    
         canvas.delete(firstLaser)
@@ -81,14 +69,14 @@ def laserPlayer():
     firstLaser=canvas.create_image(x-20,y-20,image=imageLaser1)
     secondLaser=canvas.create_image(x+20,y-20,image=imageLaser2)
     lasershooting()
-def impactBulletEnnemy():
-    global firstLaser,secondLaser,ennemy,dyLaser1,dyLaser2
-    dyEnnemy1=canvas.coords(ennemy)[1]
-    dyEnnemy2=canvas.coords(ennemy)[1]
-    heightLaser=32
-    heightEnnemy=80
-    if dyLaser1+heightLaser/2<dyEnnemy1+heightEnnemy/2 or dyLaser2+heightLaser/2>dyEnnemy2-heightEnnemy/2:
-        return True
+# def impactBulletEnnemy():
+#     global firstLaser,secondLaser,ennemy,dyLaser1,dyLaser2
+#     dyEnnemy1=canvas.coords(ennemy)[1]
+#     dyEnnemy2=canvas.coords(ennemy)[1]
+#     heightLaser=32
+#     heightEnnemy=80
+#     if dyLaser1+heightLaser/2<dyEnnemy1+heightEnnemy/2 or dyLaser2+heightLaser/2>dyEnnemy2-heightEnnemy/2:
+#         return True
 
 # BIND KEYS
 root.bind("<Left>", moveLeft)
