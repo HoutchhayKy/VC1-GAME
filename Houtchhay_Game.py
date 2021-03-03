@@ -1,7 +1,6 @@
 # IMPORTS
 from tkinter import *
 import random
-
 # CREATE WINDOW
 root = Tk() 
 
@@ -31,24 +30,24 @@ ennemy7=canvas.create_image(750,80,image=ennemyImage)
 ennemy8=canvas.create_image(850,80,image=ennemyImage)
 ennemy9=canvas.create_image(950,160,image=ennemyImage)
 ennemies=[[ennemy0,10,0],[ennemy1,10,0], [ennemy2,10,0], [ennemy3,10,0], [ennemy4,10,0],[ennemy5,10,0],[ennemy6,10,0],[ennemy7,10,0],[ennemy8,10,0],[ennemy9,10,0]]
-
+print(len(ennemies))
 #POSITION  ENEMY LEVEL1
 def ennemyposition():
-    global ennemies,ennemy
+    global ennemies
     ennemiesToDelete = []
     for index in range (len(ennemies)):
         ennemy = ennemies[index][0]
         position=canvas.coords(ennemies[index][0])
-        if impactBulletEnnemy():
+        if impactBulletEnnemy(ennemy):
             canvas.delete(ennemy)
             ennemiesToDelete.append(index)
         else: 
             if position[0]<40 or position[0]>1160:
                 ennemies[index][1]=-ennemies[index][1]
             canvas.move(ennemies[index][0],ennemies[index][1],ennemies[index][2])
-    for index in sorted(ennemiesToDelete, reverse=True):
-        ennemies.pop(index)
-    canvas.after(90,ennemyposition())
+    for i in sorted(ennemiesToDelete, reverse=True):
+        ennemies.pop(i)
+    canvas.after(90,lambda:ennemyposition())
 # ACTION PLAYER
 def moveRight(event):
     if canvas.coords(playerId)[0]<=1160:
@@ -64,11 +63,7 @@ def lasershooting():
     canvas.move(secondLaser,0,-20)
     dyLaser1=canvas.coords(firstLaser)[1]
     dyLaser2=canvas.coords(secondLaser)[1]
-    impact = False
-    for index in range(len(ennemies)):
-        if impactBulletEnnemy():
-            impact = True
-    if dyLaser1>0 and dyLaser2>0 and impact==False:
+    if dyLaser1>0 and dyLaser2>0: 
         canvas.after(5,lambda:lasershooting())
     else:    
         canvas.delete(firstLaser)
@@ -81,13 +76,13 @@ def laserPlayer():
     firstLaser=canvas.create_image(x-20,y-20,image=imageLaser1)
     secondLaser=canvas.create_image(x+20,y-20,image=imageLaser2)
     lasershooting()
-def impactBulletEnnemy():
-    global firstLaser,secondLaser,ennemy,dyLaser1,dyLaser2
+def impactBulletEnnemy(ennemy):
+    global firstLaser,secondLaser,dyLaser1,dyLaser2
     dyEnnemy1=canvas.coords(ennemy)[1]
     dyEnnemy2=canvas.coords(ennemy)[1]
     heightLaser=32
     heightEnnemy=80
-    if dyLaser1+heightLaser/2<dyEnnemy1+heightEnnemy/2 or dyLaser2+heightLaser/2>dyEnnemy2-heightEnnemy/2:
+    if dyLaser1+heightLaser/2<dyEnnemy1+heightEnnemy/2 and dyLaser2+heightLaser/2>dyEnnemy2-heightEnnemy/2:
         return True
 
 # BIND KEYS
@@ -95,7 +90,7 @@ root.bind("<Left>", moveLeft)
 root.bind("<Right>", moveRight)
 
 #CALL FUNCTION
-ennemyposition()
 laserPlayer()
+ennemyposition()
 
 root.mainloop()
